@@ -1,0 +1,47 @@
+version: '2'
+services:
+
+############################################
+############################################
+  kafka-1:
+    build: ./build-kafka/
+    ports:
+      - "9092:9092"
+    volumes:
+      - ./config-kafka/admin.conf:/opt/kafka/config/admin.conf
+      - ./data/kafka/1:/kafka
+      - ./config-kafka/broker1.conf:/opt/kafka/config/server.properties
+     
+  ############################################
+  kafka-2:
+    build: ./build-kafka/
+    ports:
+      - "19092:19092"
+    volumes:
+      - ./config-kafka/admin.conf:/opt/kafka/config/admin.conf
+      - ./data/kafka/2:/kafka
+      - ./config-kafka/broker2.conf:/opt/kafka/config/server.properties
+     
+
+  ############################################
+  kafka-3:
+    build: ./build-kafka/
+    ports:
+      - "29092:29092"
+    volumes:
+      - ./config-kafka/admin.conf:/opt/kafka/config/admin.conf
+      - ./data/kafka/3:/kafka
+      - ./config-kafka/broker3.conf:/opt/kafka/config/server.properties
+
+
+
+  kafka-ui:
+    container_name: kafka-ui
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - 8080:8080
+     
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka-1:9092,kafka-2:9092,kafka-3:9092
+      
